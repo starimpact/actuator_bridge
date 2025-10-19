@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>actuator_bridge</name>
+  <version>0.1.0</version>
+  <description>Unified actuator CAN bridge supporting multiple motor vendors</description>
+
+  <maintainer email="dev@example.com">dev</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>can_msgs</depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>roslaunch</exec_depend>
+  <exec_depend>socketcan_bridge</exec_depend>
+  <!-- No custom messages used -->
+</package>

@@ -1,0 +1,14 @@
+<launch>
+  <node pkg="socketcan_bridge" type="socketcan_bridge_node" name="socketcan_can1_0" output="screen">
+    <param name="can_device" value="can1"/>
+    <remap from="can_rx" to="/can1_rx"/>
+    <remap from="can_tx" to="/can1_tx"/>
+  </node>
+
+  <node pkg="socketcan_bridge" type="socketcan_bridge_node" name="socketcan_can2_1" output="screen">
+    <param name="can_device" value="can2"/>
+    <remap from="can_rx" to="/can2_rx"/>
+    <remap from="can_tx" to="/can2_tx"/>
+  </node>
+
+</launch>

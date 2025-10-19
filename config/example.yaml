@@ -1,0 +1,6 @@
+buses:
+  - vendor: robstride
+    models:
+      RS_05: { p_min: -12.57, p_max: 12.57, v_min: -50.0, v_max: 50.0, t_min: -5.5, t_max: 5.5, kp_min: 0.0, kp_max: 500.0, kd_min: 0.0, kd_max: 5.0 }
+    actuators:
+      - { name: ankle, id: 0x01, model: RS_05, rx_topic: /can0_rx, tx_topic: /can0_tx, can_device: can0 }

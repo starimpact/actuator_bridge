@@ -1,0 +1,62 @@
+<launch>
+  <!--
+    Demo launch: auto-spawn socketcan_bridge nodes from YAML and run actuator_bridge as a library-based node.
+    Edit config YAML to define buses/actuators. You can override parameters below at launch time.
+  -->
+
+  <!-- Config file with 'buses' root -->
+  <arg name="config" default="$(find actuator_bridge)/config/example.yaml" />
+
+  <!-- Bridge behavior -->
+  <arg name="auto_enable" default="true" />
+
+  <!-- Feedback printing (memory snapshot) -->
+  <arg name="print_feedback" default="false" />
+  <arg name="print_rate" default="2.0" />
+
+  <!-- Demo command generator (memory send) -->
+  <arg name="demo_enable" default="true" />
+  <arg name="demo_mode" default="hold" />   <!-- hold | sine -->
+  <arg name="demo_name" default="ankle" />       <!-- actuator name from YAML -->
+  <arg name="demo_rate" default="100.0" />
+  <arg name="demo_freq" default="0.5" />
+
+  <!-- Status query (memory read) -->
+  <arg name="status_name" default="" />
+  <arg name="status_rate" default="0.0" />
+
+  <!-- Load YAML under a fixed namespace for the auto spawner -->
+  <group ns="socketcan_auto_cfg">
+    <rosparam command="load" file="$(arg config)" />
+  </group>
+
+  <!-- Auto-spawn socketcan_bridge nodes according to YAML -->
+  <node pkg="socketcan_bridge" type="socketcan_bridge_node" name="socketcan_can0" output="screen">
+    <param name="~can_device" value="can0"/>
+    <remap from="sent_messages" to="/can0_tx" />
+    <remap from="received_messages" to="/can0_rx" />
+  </node>
+
+  
+
+  <!-- Actuator bridge node (library usage demo) -->
+  <node pkg="actuator_bridge" type="actuator_bridge_node" name="actuator_bridge" output="screen">
+    <param name="auto_enable" value="$(arg auto_enable)" />
+    <param name="print_feedback" value="$(arg print_feedback)" />
+    <param name="print_rate" value="$(arg print_rate)" />
+    <param name="demo_enable" value="$(arg demo_enable)" />
+    <param name="demo_mode" value="$(arg demo_mode)" />
+    <param name="demo_name" value="$(arg demo_name)" />
+    <param name="demo_rate" value="$(arg demo_rate)" />
+    <param name="demo_freq" value="$(arg demo_freq)" />
+    <param name="status_name" value="$(arg status_name)" />
+    <param name="status_rate" value="$(arg status_rate)" />
+    <param name="demo_amp" value="0.0" />
+    <param name="demo_vel" value="1.0" />
+    <param name="demo_torque" value="0.0" />
+    <param name="demo_kp" value="0.0" />
+    <param name="demo_kd" value="0.17" />
+    <!-- Load same config into the node's private namespace for bridge.loadFromParams() -->
+    <rosparam command="load" file="$(arg config)" />
+  </node>
+</launch>

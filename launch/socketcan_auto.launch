@@ -1,0 +1,15 @@
+<launch>
+  <!-- Args: YAML with buses list. Each bus can specify can_device, rx_topic, tx_topic. -->
+  <arg name="config" default="$(find actuator_bridge)/config/example.yaml" />
+
+  <!-- Load YAML into a private namespace to access via subst/rosparam -->
+  <group ns="socketcan_auto_cfg">
+    <rosparam command="load" file="$(arg config)" />
+  </group>
+
+  <!--
+    ROS1 launch 没有原生 for-each，但可通过 xacro 或 python 节点动态生成。
+    这里提供一个轻量方案：用 python 节点读取参数并创建 child launches。
+  -->
+  <node pkg="actuator_bridge" type="socketcan_spawner.py" name="socketcan_spawner" output="screen" />
+</launch>
