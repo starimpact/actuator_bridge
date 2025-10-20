@@ -17,7 +17,7 @@
   <!-- Demo command generator (memory send) -->
   <arg name="demo_enable" default="true" />
   <arg name="demo_mode" default="hold" />   <!-- hold | sine -->
-  <arg name="demo_name" default="ankle" />       <!-- actuator name from YAML -->
+  <arg name="demo_name" default="knee" />       <!-- actuator name from YAML -->
   <arg name="demo_rate" default="100.0" />
   <arg name="demo_freq" default="0.5" />
 
@@ -52,10 +52,11 @@
     <param name="status_name" value="$(arg status_name)" />
     <param name="status_rate" value="$(arg status_rate)" />
     <param name="demo_amp" value="0.0" />
-    <param name="demo_vel" value="1.0" />
+    <param name="demo_vel" value="0.0" />
     <param name="demo_torque" value="0.0" />
     <param name="demo_kp" value="0.0" />
-    <param name="demo_kd" value="0.17" />
+    <!-- <param name="demo_kd" value="0.17" /> -->
+    <param name="demo_kd" value="1.04" />
     <!-- Load same config into the node's private namespace for bridge.loadFromParams() -->
     <rosparam command="load" file="$(arg config)" />
   </node>

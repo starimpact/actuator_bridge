@@ -2,6 +2,10 @@
 #include <cmath>
 #include <string>
 #include "actuator_bridge/bridge.h"
+#include <csignal>
+
+// static volatile std::sig_atomic_t g_shutdown_requested = 0;
+// static void handle_signal(int) { g_shutdown_requested = 1; }
 
 int main(int argc, char** argv){
   ros::init(argc, argv, "actuator_bridge_node");
@@ -14,6 +18,7 @@ int main(int argc, char** argv){
     if (auto_enable) {
       ros::Duration(0.5).sleep(); // wait for everything to come up
       bridge.enableAll();
+      // bridge.disableAll(); // test disable right after enable
     }
     // return 0;
     // Optional: periodically print a snapshot of feedback (memory access, no topics)
@@ -52,7 +57,7 @@ int main(int argc, char** argv){
       const double dt = 1.0/std::max(1e-3, demo_rate);
       const double two_pi = 2.0 * M_PI;
       ros::Time t0 = ros::Time::now();
-      // printf("Starting demo mode '%s' for actuator '%s' at %.1f Hz\n", demo_mode.c_str(), demo_name.c_str(), demo_rate);
+      printf("Starting demo mode '%s' for actuator '%s' at %.1f Hz\n", demo_mode.c_str(), demo_name.c_str(), demo_rate);
       demo_timer = nh.createTimer(ros::Duration(dt),
         [&, t0, two_pi, demo_mode, demo_name, amp, freq, vel, tq, kp, kd](const ros::TimerEvent& ev){
           actuator_bridge::ActuatorCommand cmd;
@@ -92,7 +97,22 @@ int main(int argc, char** argv){
         });
     }
 
+    // Replace blocking spin with a loop so we can intercept signals and
+    // call bridge.disableAll() while publishers are still valid.
+    // signal(SIGINT, handle_signal);
+    // signal(SIGTERM, handle_signal);
+    // ros::Rate loop_rate(50);
     ros::spin();
+    // while (ros::ok() && !g_shutdown_requested) {
+    //   ros::spinOnce();
+    //   loop_rate.sleep();
+    // }
+    // if (g_shutdown_requested) {
+    //   ROS_INFO("Shutdown requested, disabling actuators before ROS shutdown");
+    //   bridge.disableAll();
+    //   // Now trigger normal ROS shutdown so other resources clean up
+    //   ros::shutdown();
+    // }
   } catch (const std::exception& e) {
     ROS_FATAL("actuator_bridge_node failed: %s", e.what());
     return 1;

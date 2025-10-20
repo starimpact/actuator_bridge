@@ -1,6 +1,13 @@
 buses:
-  - vendor: robstride
+  - vendor: dm
     models:
-      RS_05: { p_min: -12.57, p_max: 12.57, v_min: -50.0, v_max: 50.0, t_min: -5.5, t_max: 5.5, kp_min: 0.0, kp_max: 500.0, kd_min: 0.0, kd_max: 5.0 }
+      dm6006: { p_min: -12.5, p_max: 12.5, v_min: -45.0, v_max: 45.0, t_min: -20.0, t_max: 20.0, kp_min: 0.0, kp_max: 500.0, kd_min: 0.0, kd_max: 5.0 }
+      dm8006: { p_min: -12.5, p_max: 12.5, v_min: -45.0, v_max: 45.0, t_min: -30.0, t_max: 30.0, kp_min: 0.0, kp_max: 600.0, kd_min: 0.0, kd_max: 8.0 }
     actuators:
-      - { name: ankle, id: 0x01, model: RS_05, rx_topic: /can0_rx, tx_topic: /can0_tx, can_device: can0 }
+      - { name: hip, id: 0x02, model: dm8006, rx_topic: /can0_rx, tx_topic: /can0_tx, can_device: can0 }
+      - { name: knee, id: 0x03, model: dm8006, rx_topic: /can0_rx, tx_topic: /can0_tx, can_device: can0 }
+  # - vendor: robstride
+  #   models:
+  #     RS_05: { p_min: -12.57, p_max: 12.57, v_min: -50.0, v_max: 50.0, t_min: -5.5, t_max: 5.5, kp_min: 0.0, kp_max: 500.0, kd_min: 0.0, kd_max: 5.0 }
+  #   actuators:
+  #     - { name: ankle, id: 0x01, model: RS_05, rx_topic: /can0_rx, tx_topic: /can0_tx, can_device: can0 }

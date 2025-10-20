@@ -23,6 +23,7 @@ class ActuatorBridge {
  public:
   explicit ActuatorBridge(ros::NodeHandle& nh, ros::NodeHandle& pnh);
   ~ActuatorBridge() { 
+    // std::cerr << "ActuatorBridge::~ActuatorBridge() called\n";
     ROS_INFO("Shutting down actuator bridge...");
     disableAll(); 
   }
