@@ -6,7 +6,7 @@ namespace actuator_bridge {
 
 class DMDriver : public DriverBase {
  public:
-  DMDriver(std::string can_name) : can_name_(std::move(can_name)) {}
+  DMDriver() = default;
   std::string vendor() const override { return "dm"; }
   void encodeCommand(const ActuatorCommand& cmd, std::vector<can_msgs::Frame>& out) override;
   bool parseFeedback(const can_msgs::Frame& in, ActuatorFeedback& out) override;
@@ -21,7 +21,6 @@ class DMDriver : public DriverBase {
     return Limits{};
   }
  private:
-  std::string can_name_;
   std::unordered_map<int, Limits> limits_;
 };
 

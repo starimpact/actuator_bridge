@@ -6,7 +6,7 @@ namespace actuator_bridge {
 
 class RobStrideDriver : public DriverBase {
  public:
-  RobStrideDriver(std::string can_name) : can_name_(std::move(can_name)) {}
+  RobStrideDriver() = default;
   std::string vendor() const override { return "robstride"; }
   void encodeCommand(const ActuatorCommand& cmd, std::vector<can_msgs::Frame>& out) override;
   bool parseFeedback(const can_msgs::Frame& in, ActuatorFeedback& out) override;
@@ -14,7 +14,6 @@ class RobStrideDriver : public DriverBase {
   void makeDisable(int id, std::vector<can_msgs::Frame>& out) override;
   void makeZero(int id, std::vector<can_msgs::Frame>& out) override;
  private:
-  std::string can_name_;
   // For future per-actuator limits, not used yet in parsing (only in encode)
   std::unordered_map<int, Limits> limits_;
  public:

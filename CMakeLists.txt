@@ -28,6 +28,7 @@ include_directories(
 add_library(actuator_drivers
   src/drivers/dm_driver.cpp
   src/drivers/robstride_driver.cpp
+  src/driver_registry.cpp
 )
 add_dependencies(actuator_drivers ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 

@@ -11,8 +11,11 @@ int main(int argc, char** argv){
     if (!bridge.loadFromParams()) return 1;
 
     bool auto_enable=false; pnh.param("auto_enable", auto_enable, false);
-    if (auto_enable) bridge.enableAll();
-
+    if (auto_enable) {
+      ros::Duration(0.5).sleep(); // wait for everything to come up
+      bridge.enableAll();
+    }
+    // return 0;
     // Optional: periodically print a snapshot of feedback (memory access, no topics)
     bool print_feedback=false; pnh.param("print_feedback", print_feedback, false);
     double print_rate=2.0;    pnh.param("print_rate", print_rate, 2.0);

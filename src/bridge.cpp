@@ -1,4 +1,5 @@
 #include "actuator_bridge/bridge.h"
+#include "actuator_bridge/driver_registry.h"
 #include <boost/bind.hpp>
 
 namespace actuator_bridge {
@@ -26,9 +27,9 @@ int ActuatorBridge::getOrCreateBus(const std::string& vendor, const std::string&
   auto it = bus_index_by_key_.find(key);
   if (it != bus_index_by_key_.end()) return it->second;
   Bus newbus; newbus.rx_topic=rx; newbus.tx_topic=tx;
-  if (vendor=="dm") newbus.driver = std::make_shared<DMDriver>(vendor);
-  else if (vendor=="robstride") newbus.driver = std::make_shared<RobStrideDriver>(vendor);
-  else throw std::runtime_error("unsupported vendor: "+vendor);
+  // create driver via registry to allow runtime extensibility without modifying this file
+  newbus.driver = DriverRegistry::instance().create(vendor);
+  if (!newbus.driver) throw std::runtime_error("unsupported vendor: "+vendor);
   int idx = (int)buses_.size();
   newbus.pub = nh_.advertise<can_msgs::Frame>(tx, 100);
   newbus.sub = nh_.subscribe<can_msgs::Frame>(rx, 100, boost::bind(&ActuatorBridge::onCanRx, this, _1, idx));

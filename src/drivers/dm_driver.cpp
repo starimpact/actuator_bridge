@@ -1,4 +1,5 @@
 #include "actuator_bridge/drivers/dm_driver.h"
+#include "actuator_bridge/driver_registry.h"
 #include <algorithm>
 
 namespace {
@@ -81,3 +82,14 @@ void DMDriver::makeZero(int id, std::vector<can_msgs::Frame>& out) {
 }
 
 } // namespace actuator_bridge
+
+// static registrar to auto-register DMDriver
+namespace {
+struct _dm_reg {
+  _dm_reg() {
+    actuator_bridge::DriverRegistry::instance().registerFactory("dm", [](){
+      return std::make_shared<actuator_bridge::DMDriver>();
+    });
+  }
+} _dm_reg_instance;
+}

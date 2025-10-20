@@ -1,4 +1,5 @@
 #include "actuator_bridge/drivers/robstride_driver.h"
+#include "actuator_bridge/driver_registry.h"
 #include <cstring>
 
 namespace {
@@ -100,3 +101,14 @@ void RobStrideDriver::makeZero(int id, std::vector<can_msgs::Frame>& out) {
 }
 
 } // namespace actuator_bridge
+
+// static registrar to auto-register RobStrideDriver
+namespace {
+struct _rob_reg {
+  _rob_reg() {
+    actuator_bridge::DriverRegistry::instance().registerFactory("robstride", [](){
+      return std::make_shared<actuator_bridge::RobStrideDriver>();
+    });
+  }
+} _rob_reg_instance;
+}

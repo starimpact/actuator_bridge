@@ -22,7 +22,10 @@ namespace actuator_bridge {
 class ActuatorBridge {
  public:
   explicit ActuatorBridge(ros::NodeHandle& nh, ros::NodeHandle& pnh);
-  ~ActuatorBridge() = default;
+  ~ActuatorBridge() { 
+    ROS_INFO("Shutting down actuator bridge...");
+    disableAll(); 
+  }
 
   // Load configuration from ROS param (~buses). Returns false if invalid.
   bool loadFromParams();
